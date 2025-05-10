@@ -1,8 +1,61 @@
-<video id="video" controls autoplay width="640" height="360"></video>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script>
-    const video = document.getElementById('video');
-    const hls = new Hls();
-    hls.loadSource('http://epg.protv.cc:80/play/live.php?mac=00:1A:79:C8:04:A0&stream=1118131&extension=ts&play_token=cGWGk2NVqY');
-    hls.attachMedia(video);
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Shaka Player HLS Example</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.6.0/shaka-player.compiled.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      height: 100%;
+      width: 100%;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+  <video id="video" autoplay controls></video>
+
+  <script>
+    async function initApp() {
+      const video = document.getElementById('video');
+      const manifestUri = "http://epg.protv.cc:80/play/live.php?mac=00:1A:79:C8:04:A0&stream=1118131&extension=m3u8&play_token=cGWGk2NVqY";
+
+      // Install polyfills
+      shaka.polyfill.installAll();
+
+      if (shaka.Player.isBrowserSupported()) {
+        const player = new shaka.Player(video);
+
+        // Optional: Error handling
+        player.addEventListener('error', onErrorEvent);
+
+        try {
+          await player.load(manifestUri);
+          console.log('The video has now been loaded!');
+        } catch (e) {
+          onError(e);
+        }
+      } else {
+        console.error('Browser not supported!');
+      }
+    }
+
+    function onErrorEvent(event) {
+      onError(event.detail);
+    }
+
+    function onError(error) {
+      console.error('Error code', error.code, 'object', error);
+    }
+
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
