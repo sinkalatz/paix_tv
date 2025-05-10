@@ -1,0 +1,8 @@
+<video id="video" controls autoplay width="640" height="360"></video>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+    const video = document.getElementById('video');
+    const hls = new Hls();
+    hls.loadSource('http://epg.protv.cc:80/play/live.php?mac=00:1A:79:C8:04:A0&stream=1118131&extension=ts&play_token=cGWGk2NVqY');
+    hls.attachMedia(video);
+</script>
